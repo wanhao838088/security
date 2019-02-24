@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "better-scroll": "^1.13.4",
+    "crypto-js": "^3.1.9-1",
     "mint-ui": "^2.2.13",
     "mockjs": "^1.0.1-beta3",
     "stylus": "^0.54.5",

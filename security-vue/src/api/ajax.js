@@ -32,7 +32,7 @@ export default function ajax(url='',data={},type='GET',headers={}){
       promise = axios.get(url,headers)
     } else {
       // 发送 post 请求
-      promise = axios.post(url, data)
+      promise = axios.post(url, data,headers)
     }
 
     promise.then(response => {

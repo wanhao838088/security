@@ -7,15 +7,15 @@ import ajax from './ajax'
 const BASE_URL = 'http://cangdu.org:8001';
 
 //自有项目api
-const MY_URL = 'http://localhost:8060';
+const MY_URL = 'http://localhost:8081/renren-api/api';
 
-// 6、用户名密码登陆
-export const reqPwdLogin = ({name, password,imageCode},{headers}) =>
-  ajax(MY_URL+'/oauth/token', {name, password,imageCode},"POST",{headers});
+// 1、手机号密码登陆
+export const reqPwdLogin = ({name, password}) =>
+  ajax(MY_URL+`/login`,{mobile:name, password},"POST");
 
-// 7、发送短信验证码
-export const reqSendCode = (phone) =>
-  ajax(MY_URL+'/smsController/sendSms', {phone});
+// 2、发送短信验证码
+export const reqSendCode = ({mobile,deviceId}) =>
+  ajax(MY_URL+'/getCode', {mobile,deviceId},"POST");
 
 
 // 8、手机号验证码登陆

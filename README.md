@@ -17,4 +17,8 @@
 * security-vue模块
  使用Vue.js编写的前台SPA应用，使用api模块提供Api
 
+### 一、security-vue
+使用vue、vuex、better-scroll、mint-ui作为主要依赖，编写的前台应用。
+支持手机号登录和账号密码登录，登录成功后返回token，在请求头中携带token，完成请求
+需要登录的url。
 

@@ -39,10 +39,6 @@
                   <span class="switch_text">{{isShowPwd?'abc':'...'}}</span>
                 </div>
               </section>
-              <section class="login_message">
-                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                <img ref="captcha" class="get_verification" src="" alt="captcha" @click="changeCaptcha">
-              </section>
             </section>
           </div>
           <button class="login_submit">登录</button>
@@ -66,20 +62,18 @@
   import {reqSendCode,reqSmsLogin,reqPwdLogin} from '../../api'
   import {mapActions} from 'vuex'
 
-  import {captchaUrl,base64Wanhao} from '../../utils/constants'
-  import {getDeviceId} from '../../utils/utils'
+  import {getDeviceId}  from '../../utils/utils'
 
   export default {
     data(){
       return{
         isSmsLogin:true,
-        phone: '', // 手机号
+        phone: '18865392565', // 手机号
         isShowPwd: false, // 是否显示密码
         computeTime: 0, // 计时的时间
-        password:'admin',//密码
+        password:'123456',//密码
         code:'',//短信验证码
-        name:'admin',//用户名
-        captcha:'',//图形验证码
+        name:'13562959695',//用户名
         alertText:'',
         isShowAlert:false //是否显示提示框
       }
@@ -91,13 +85,6 @@
     },
     methods:{
       ...mapActions(['receiveUserInfo']),
-      /**
-       * 切换验证码
-       */
-      changeCaptcha(event){
-        let deviceId = getDeviceId();
-        event.target.src =captchaUrl+ `&deviceId=${deviceId}&now=`+new Date();
-      },
       /**
        * 发送短信验证码
        */
@@ -113,8 +100,11 @@
             }
           },1000);
           // 发送验证码
-          let result = await reqSendCode(this.phone);
-          if(result.code===1){
+          let deviceId =  getDeviceId();
+          let result = await reqSendCode({mobile:this.phone,deviceId});
+
+
+          if(result.code!==0){
             //发送失败
             this.alertMsg(result.msg);
             //重置定时
@@ -157,8 +147,7 @@
 
         }else {
           //密码登录
-          let {name,password,captcha} = this;
-          let imageCode = captcha;
+          let {name,password} = this;
           if(!name){
             //用户名不能为空
             this.alertMsg("用户名不能为空");
@@ -167,27 +156,17 @@
             //密码不能为空
             this.alertMsg("密码不能为空");
             return;
-          }else if(!captcha){
-            //验证码不能为空
-            this.alertMsg("验证码不能为空");
-            return;
           }
-          //计算请求头信息
-          let headers = {
-            headers:{
-              Authorization:base64Wanhao
-            }
-          };
-          let user = await reqPwdLogin({name,password,imageCode},headers);
-          console.log(user);
+          let object = await reqPwdLogin({name,password});
+          console.log(object);
 
           //错误信息显示
-          if (user.code === 1) {
-            this.alertMsg(user.msg);
+          if (object.code !== 0) {
+            this.alertMsg(object.msg);
             return;
           }
           //保存用户信息
-          this.receiveUserInfo(user.data);
+          //this.receiveUserInfo(user.data);
           this.$router.replace('/profile');
 
         }
@@ -210,12 +189,6 @@
     components:{
       AlertTip
     },
-    //获取验证码
-    mounted(){
-      let deviceId = getDeviceId();
-      this.$refs.captcha.src=captchaUrl+`&deviceId=${deviceId}&now=`+new Date();
-    }
-
   }
 </script>
 
