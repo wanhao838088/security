@@ -103,7 +103,6 @@
           let deviceId =  getDeviceId();
           let result = await reqSendCode({mobile:this.phone,deviceId});
 
-
           if(result.code!==0){
             //发送失败
             this.alertMsg(result.msg);
@@ -133,15 +132,16 @@
             this.alertMsg("验证码不能为空");
             return;
           }
-          let user = await reqSmsLogin(phone,code);
+          let user = await reqSmsLogin({mobile:phone,password:code});
 
           //错误信息显示
-          if (user.code === 1) {
+          if (user.code !== 0) {
             this.alertMsg(user.msg);
             return;
           }
           //保存用户信息
-          this.receiveUserInfo(user.data);
+          //this.receiveUserInfo(user.data);
+
           //页面调转
           this.$router.replace('/profile');
 

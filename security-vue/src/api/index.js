@@ -19,8 +19,8 @@ export const reqSendCode = ({mobile,deviceId}) =>
 
 
 // 8、手机号验证码登陆
-export const reqSmsLogin = (phone, code) =>
-  ajax(MY_URL+'/userController/loginByPhone', {phone, code});
+export const reqSmsLogin = ({mobile, password}) =>
+  ajax(MY_URL+'/loginByCode', {mobile, password},"POST");
 
 
 // 9、根据会话获取用户信息
